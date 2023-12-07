@@ -1,2 +1,2 @@
-# testeSeidorApi
+# SeidorApi
 Teste de desenvolvimento
