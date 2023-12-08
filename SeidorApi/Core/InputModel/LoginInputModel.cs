@@ -2,16 +2,11 @@
 
 public class LoginInputModel
 {
-    public LoginInputModel(string nome, string senha, string email)
-    {
-        Nome = nome;
+    public LoginInputModel(string email, string senha)
+    {        
         Senha = senha;
         Email = email;
-    }
-
-    public int Id { get; set; }
-
-    public string Nome { get; set; }
+    }  
 
     public string Senha { get; set; }
 

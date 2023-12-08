@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SeidorApi.Core.InputModel;
+using SeidorApi.Core.Interfaces;
 
 namespace SeidorApi.Controllers;
 
@@ -7,10 +8,24 @@ namespace SeidorApi.Controllers;
 [Route("[controller]")]
 public class HomeController : ControllerBase
 {
-    [HttpPost]
-    public IActionResult Login(LoginInputModel loginInputModel)
-    {
+    private readonly IUserService _userService;
 
-        return Ok();
+    public HomeController(IUserService userService)
+    {
+        _userService = userService;
+    }
+
+    [HttpPost("Login")]
+    public async Task<IActionResult> Login(LoginInputModel loginInputModel)
+    {
+        try
+        {
+            var _usuario = await _userService.ObterUsuario(loginInputModel.Email, loginInputModel.Senha);
+            return Ok(_usuario);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 }

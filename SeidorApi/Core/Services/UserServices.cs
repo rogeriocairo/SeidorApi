@@ -5,8 +5,20 @@ namespace SeidorApi.Core.Services;
 
 public class UserServices : IUserService
 {
-    public Task<UserEntity> ObterUsuario(string nome, string senha)
+    private readonly IUserRepository _userRepository;
+
+    public UserServices(IUserRepository userRepository)
     {
-        throw new NotImplementedException();
+        _userRepository = userRepository;
+    }
+
+    public async Task<UserEntity?> ObterUsuario(string email, string senha)
+    {
+        ArgumentNullException.ThrowIfNull(email);
+        ArgumentNullException.ThrowIfNull(senha);
+
+        var _usuario = await _userRepository.ObterUsuarioAsync(email, senha);
+
+        return _usuario;
     }
 }

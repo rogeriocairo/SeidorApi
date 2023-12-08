@@ -1,0 +1,11 @@
+﻿Use Seidor
+GO
+
+CREATE TABLE Usuarios (
+    Id INT IDENTITY(1, 1) NOT NULL,
+    Nome VARCHAR(50) NOT NULL,
+    Senha VARCHAR(10) NOT NULL,
+    Email VARCHAR(100) NOT NULL UNIQUE,
+    CONSTRAINT PK_Usuarios PRIMARY KEY (Id)
+);
+GO
