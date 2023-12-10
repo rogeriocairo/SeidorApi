@@ -1,11 +1,8 @@
 ﻿using Dapper;
-using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
 using SeidorApi.Core.Entities;
 using SeidorApi.Core.Interfaces;
 using SeidorApi.Infra.Data;
 using System.Data;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace SeidorApi.Infra.Repositories
 {
@@ -18,31 +15,55 @@ namespace SeidorApi.Infra.Repositories
             _conexao = conexao;
         }
 
+        public async Task<int> EditarUsuariosAsync(UserEntity userEntity)
+        {
+            using var db = _conexao.ObterConexao();
+            await db.OpenAsync();
+            var _procedure = "sp_EditUsers";
+            var _results = await db.ExecuteAsync(
+                                    _procedure,
+                                    userEntity,
+                                    commandType: CommandType.StoredProcedure);
+
+            return _results;
+        }
+
+        public async Task<int> InserirUsuariosAsync(UserEntity userEntity)
+        {
+            using var db = _conexao.ObterConexao();
+            await db.OpenAsync();
+            var _procedure = "sp_InsertUsers";
+            var _results = await db.ExecuteAsync(
+                                    _procedure,
+                                    userEntity,
+                                    commandType: CommandType.StoredProcedure);
+
+            return _results;
+        }
+
         public async Task<IEnumerable<UserEntity>> ListarUsuarioAsync()
         {
             using var db = _conexao.ObterConexao();
             await db.OpenAsync();
-            var _procedure = "sp_GetUsers";            
+            var _procedure = "sp_GetUsers";
             var _results = db.Query<UserEntity>(
-                                    _procedure,                                    
+                                    _procedure,
                                     commandType: CommandType.StoredProcedure);
 
             return _results;
         }
 
 
-        public async Task<UserEntity> ObterUsuarioAsync(string email, string senha)
+        public async Task<UserEntity?> ObterUsuarioAsync(string email, string senha)
         {
             using var db = _conexao.ObterConexao();
             await db.OpenAsync();
             var _procedure = "sp_GetUsers";
             var _values = new { email = email, senha = senha };
-            var _results =  db.Query<UserEntity>(
-                                    _procedure,
-                                    _values,
-                                    commandType: CommandType.StoredProcedure);
+            var _results = await db.QueryAsync<UserEntity>(
+                            _procedure, _values, commandType: CommandType.StoredProcedure);
 
-            return _results.ElementAt(0);
+            return _results.FirstOrDefault();
         }
     }
 }

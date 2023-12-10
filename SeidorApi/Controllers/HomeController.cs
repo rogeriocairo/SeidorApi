@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SeidorApi.Core.Entities;
 using SeidorApi.Core.InputModel;
 using SeidorApi.Core.Interfaces;
 
@@ -20,8 +21,50 @@ public class HomeController : ControllerBase
     {
         try
         {
-            var _usuario = await _userService.ObterUsuario(loginInputModel.Email, loginInputModel.Senha);
+            var _usuario = await _userService.ObterUsuarioAsync(loginInputModel.Email, loginInputModel.Senha);
             return Ok(_usuario);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpPost("ListarUsuarios")]
+    public async Task<IActionResult> ListarUsuarios()
+    {
+        try
+        {
+            var _usuario = await _userService.ListarUsuariosAsync();
+            return Ok(_usuario);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpPost("InserirUsuarios")]
+    public async Task<IActionResult> InserirUsuarios(UserEntity userEntity)
+    {
+        try
+        {
+            await _userService.InserirUsuariosAsync(userEntity);
+            return Ok($"Usuário Criado");
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpPost("EditarUsuarios")]
+    public async Task<IActionResult> AlterarUsuarios(UserEntity userEntity)
+    {
+        try
+        {
+            var _usuario = await _userService.EditarUsuariosAsync(userEntity);
+            return Ok($"Usuário Alterado - {_usuario}");
         }
         catch (Exception ex)
         {

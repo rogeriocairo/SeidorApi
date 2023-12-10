@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE sp_GetUsers
-(
+    (
     @email  VARCHAR(100) = NULL,
     @senha  VARCHAR(10) = NULL
 )
@@ -14,5 +14,5 @@ BEGIN
         Usuarios usu
     WHERE
         (Email = @email OR @email is null) and
-        (Senha = @senha OR @senha is null) 
+        (Senha = @senha OR @senha is null)
 END;

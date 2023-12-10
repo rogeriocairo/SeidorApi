@@ -12,13 +12,28 @@ public class UserServices : IUserService
         _userRepository = userRepository;
     }
 
-    public async Task<UserEntity?> ObterUsuario(string email, string senha)
+    public async Task<int> EditarUsuariosAsync(UserEntity userEntity)
+    {
+        return await _userRepository.EditarUsuariosAsync(userEntity);
+    }
+
+    public async Task<int> InserirUsuariosAsync(UserEntity userEntity)
+    {
+        return await _userRepository.InserirUsuariosAsync(userEntity);
+    }
+
+    public async Task<IEnumerable<UserEntity>> ListarUsuariosAsync()
+    {
+        return await _userRepository.ListarUsuarioAsync();
+    }
+
+    public async Task<UserEntity?> ObterUsuarioAsync(string email, string senha)
     {
         ArgumentNullException.ThrowIfNull(email);
         ArgumentNullException.ThrowIfNull(senha);
 
         var _usuario = await _userRepository.ObterUsuarioAsync(email, senha);
 
-        return _usuario;
+        return _usuario ?? throw new Exception("Usuário/senha inválidos");
     }
 }
