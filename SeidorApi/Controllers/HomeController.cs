@@ -30,7 +30,7 @@ public class HomeController : ControllerBase
         }
     }
 
-    [HttpPost("ListarUsuarios")]
+    [HttpGet("ListarUsuarios")]
     public async Task<IActionResult> ListarUsuarios()
     {
         try
